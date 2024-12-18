@@ -102,11 +102,11 @@
             let term = 1 / (k * k);
 
             // Суммируем элементы, пока следующий элемент не станет меньше ε
-            while (term >= epsilon) {
+                   do {
                 sum += term;
                 k++;
                 term = 1 / (k * k);
-            }
+            } while (term >= epsilon);
 
             // Отобразить результат
             document.getElementById('result').innerHTML =
