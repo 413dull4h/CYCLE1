@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Манипуляция с диагональю матрицы</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+
+        td {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        input[type="number"] {
+            width: 50px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .output {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Манипуляция с диагональю матрицы</h1>
+        <label for="matrixSize">Введите размер матрицы (n): </label>
+        <input type="number" id="matrixSize" min="1" placeholder="n">
+        <button onclick="generateMatrix()">Создать матрицу</button>
+
+        <div id="matrixContainer"></div>
+        <button onclick="processMatrix()">Обработать матрицу</button>
+
+        <div class="output" id="output"></div>
+    </div>
+
+    <script>
+        function generateMatrix() {
+            const size = parseInt(document.getElementById('matrixSize').value);
+            if (isNaN(size) || size <= 0) {
+                alert('Пожалуйста, введите корректный размер матрицы!');
+                return;
+            }
+
+            const container = document.getElementById('matrixContainer');
+            container.innerHTML = '';
+
+            const table = document.createElement('table');
+            table.id = 'inputMatrix';
+
+            for (let i = 0; i < size; i++) {
+                const row = document.createElement('tr');
+                for (let j = 0; j < size; j++) {
+                    const cell = document.createElement('td');
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.value = 0;
+                    cell.appendChild(input);
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+
+            container.appendChild(table);
+        }
+
+        function processMatrix() {
+            const table = document.getElementById('inputMatrix');
+            if (!table) {
+                alert('Сначала создайте матрицу!');
+                return;
+            }
+
+            const size = table.rows.length;
+            const matrix = [];
+
+            for (let i = 0; i < size; i++) {
+                matrix.push([]);
+                for (let j = 0; j < size; j++) {
+                    const value = parseFloat(table.rows[i].cells[j].firstChild.value);
+                    matrix[i].push(value);
+                }
+            }
+
+            // Извлечение диагональных элементов
+            const diagonals = [];
+            for (let i = 0; i < size; i++) {
+                diagonals.push(matrix[i][i]); // Главная диагональ
+                if (i !== size - i - 1) {
+                    diagonals.push(matrix[i][size - i - 1]); // Побочная диагональ
+                }
+            }
+
+            const maxDiag = Math.max(...diagonals);
+            const minDiag = Math.min(...diagonals);
+
+            // Замена диагоналей на нули, кроме максимального и минимального
+            for (let i = 0; i < size; i++) {
+                if (matrix[i][i] !== maxDiag && matrix[i][i] !== minDiag) {
+                    matrix[i][i] = 0; // Главная диагональ
+                }
+                if (i !== size - i - 1 && matrix[i][size - i - 1] !== maxDiag && matrix[i][size - i - 1] !== minDiag) {
+                    matrix[i][size - i - 1] = 0; // Побочная диагональ
+                }
+            }
+
+            displayMatrix(matrix);
+        }
+
+        function displayMatrix(matrix) {
+            const output = document.getElementById('output');
+            output.innerHTML = '<h3>Обработанная матрица:</h3>';
+
+            const table = document.createElement('table');
+
+            matrix.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                table.appendChild(tr);
+            });
+
+            output.appendChild(table);
+        }
+    </script>
+</body>
+
+</html>
