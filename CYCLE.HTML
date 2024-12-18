@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Суммы Рядов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e7f7e7;
+            border: 1px solid #c6f1c6;
+            border-radius: 5px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Калькулятор Суммы Рядов</h1>
+        <label for="epsilon">Введите ε (Точность):</label>
+        <input type="number" id="epsilon" placeholder="Введите положительное число" step="any">
+        <button onclick="calculateSum()">Вычислить Сумму</button>
+        <button onclick="openCode()">ОТКРОЙТЕ КОД </button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function openCode(){
+            window.open("","_blank")
+        }
+        function calculateSum() {
+            // Получить значение ε из поля ввода
+            const epsilon = parseFloat(document.getElementById('epsilon').value);
+
+            // Проверка, является ли ε действительным числом и больше 0
+            if (isNaN(epsilon) || epsilon <= 0) {
+                alert("Пожалуйста, введите корректное значение для ε (> 0).");
+                return;
+            }
+
+            let sum = 0;
+            let k = 1;
+            let term = 1 / (k * k);
+
+            // Суммируем элементы, пока следующий элемент не станет меньше ε
+            while (term >= epsilon) {
+                sum += term;
+                k++;
+                term = 1 / (k * k);
+            }
+
+            // Отобразить результат
+            document.getElementById('result').innerHTML =
+                `Приближенная Сумма: ${sum.toFixed(5)} (с точностью ε = ${epsilon})`;
+        }
+    </script>
+
+</body>
+
+</html>
